@@ -22,6 +22,7 @@ public class FilmController {
 
     @GetMapping()
     public List<Film> getFilms() {
+
         return new ArrayList<>(movies.values());
     }
 
@@ -36,7 +37,6 @@ public class FilmController {
 
     @PutMapping()
     public Film updateFilm(@RequestBody Film film) {
-
         if (movies.get(film.getId()) == null) {
             logger.warn("Attempting to update not existing film!");
             throw new NoSuchElementException();
