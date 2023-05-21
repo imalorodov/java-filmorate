@@ -11,7 +11,7 @@ class UserValidationTest {
     UserController controller;
 
     @BeforeEach
-    void init () {
+    void init() {
         controller = new UserController();
     }
 
