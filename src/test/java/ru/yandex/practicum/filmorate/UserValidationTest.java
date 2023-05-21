@@ -9,12 +9,14 @@ import java.time.LocalDate;
 
 class UserValidationTest {
     UserController controller;
+
     @BeforeEach
-    void init (){
+    void init () {
         controller = new UserController();
     }
+
     @Test
-    void positiveValidation(){
+    void positiveValidation() {
         User user = new User();
         user.setName("name");
         user.setEmail("email@mail.ru");
