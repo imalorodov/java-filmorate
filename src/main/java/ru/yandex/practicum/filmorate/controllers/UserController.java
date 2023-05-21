@@ -21,13 +21,13 @@ public class UserController {
     private final HashMap<Integer, User> users = new HashMap<>();
     private int id = 1;
     @GetMapping()
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         return new ArrayList<>(users.values());
     }
     @PostMapping()
     public User addUser(@RequestBody User user) {
         validate(user);
-        if(user.getName() == null){
+        if (user.getName() == null) {
             user.setName(user.getLogin());
         }
         user.setId(id++);
@@ -49,8 +49,8 @@ public class UserController {
     }
 
     private void validate(User user) {
-        if(user.getEmail().isEmpty() || !user.getEmail().contains("@") || user.getLogin() == null ||
-                !user.getLogin().trim().equals(user.getLogin()) || user.getBirthday().isAfter(LocalDate.now())){
+        if (user.getEmail().isEmpty() || !user.getEmail().contains("@") || user.getLogin() == null ||
+                !user.getLogin().trim().equals(user.getLogin()) || user.getBirthday().isAfter(LocalDate.now())) {
             logger.warn("Validation exception in attempting create an user ");
             throw new ValidationException();
         }
