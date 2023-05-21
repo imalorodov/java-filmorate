@@ -37,6 +37,7 @@ public class FilmController {
 
     @PutMapping()
     public Film updateFilm(@RequestBody Film film){
+
         if(movies.get(film.getId()) == null){
             logger.warn("Attempting to update not existing film!");
             throw new NoSuchElementException();
