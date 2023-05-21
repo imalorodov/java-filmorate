@@ -27,7 +27,7 @@ public class FilmController {
     }
 
     @PostMapping()
-    public Film addFilm(@RequestBody Film film){
+    public Film addFilm(@RequestBody Film film) {
         validate(film);
         film.setId(id++);
         movies.put(film.getId(), film);
@@ -36,9 +36,9 @@ public class FilmController {
     }
 
     @PutMapping()
-    public Film updateFilm(@RequestBody Film film){
+    public Film updateFilm(@RequestBody Film film) {
 
-        if(movies.get(film.getId()) == null){
+        if(movies.get(film.getId()) == null) {
             logger.warn("Attempting to update not existing film!");
             throw new NoSuchElementException();
         } else {
@@ -50,7 +50,7 @@ public class FilmController {
 
     private void validate(Film film) {
         if(film.getName().isEmpty() || film.getDescription().length() > 200 || film.getDuration() < 1 ||
-                film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))){
+                film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             logger.warn("Validation exception in attempting create a film");
             throw new ValidationException();
         }
