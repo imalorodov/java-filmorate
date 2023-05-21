@@ -21,7 +21,7 @@ public class FilmController {
     private int id = 1;
 
     @GetMapping()
-    public List<Film> getFilms() { 
+    public List<Film> getFilms(){
         return new ArrayList<>(movies.values());
     }
 
