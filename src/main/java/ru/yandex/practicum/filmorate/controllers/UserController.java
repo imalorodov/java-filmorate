@@ -21,13 +21,13 @@ public class UserController {
     private final HashMap<Integer, User> users = new HashMap<>();
     private int id = 1;
     @GetMapping()
-    public List<User> getUsers() {
+    public List<User> getUsers(){
         return new ArrayList<>(users.values());
     }
     @PostMapping()
     public User addUser(@RequestBody User user) {
         validate(user);
-        if(user.getName() == null) {
+        if(user.getName() == null){
             user.setName(user.getLogin());
         }
         user.setId(id++);
@@ -39,7 +39,7 @@ public class UserController {
 
     @PutMapping()
     public User update(@RequestBody User user) {
-        if(users.get(user.getId()) == null) {
+        if(users.get(user.getId()) == null){
             logger.warn("Attempting to update not existing user!");
             throw new NoSuchElementException();
         }
@@ -50,7 +50,7 @@ public class UserController {
 
     private void validate(User user) {
         if(user.getEmail().isEmpty() || !user.getEmail().contains("@") || user.getLogin() == null ||
-                !user.getLogin().trim().equals(user.getLogin()) || user.getBirthday().isAfter(LocalDate.now())) {
+                !user.getLogin().trim().equals(user.getLogin()) || user.getBirthday().isAfter(LocalDate.now())){
             logger.warn("Validation exception in attempting create an user ");
             throw new ValidationException();
         }
