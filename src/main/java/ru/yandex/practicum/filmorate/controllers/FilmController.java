@@ -48,7 +48,7 @@ public class FilmController {
     }
 
     private void validate(Film film) {
-        if (film.getName().isEmpty() || film.getDescription().length() > 200 || film.getDuration() < 1 ||
+        if (film.getName() == null || film.getName().isEmpty() || film.getDescription().length() > 200 || film.getDuration() < 1 ||
                 film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             logger.warn("Validation exception in attempting create a film");
             throw new ValidationException();
