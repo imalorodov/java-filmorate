@@ -20,10 +20,12 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final HashMap<Integer, User> users = new HashMap<>();
     private int id = 1;
+
     @GetMapping()
     public List<User> getUsers() {
         return new ArrayList<>(users.values());
     }
+
     @PostMapping()
     public User addUser(@RequestBody User user) {
         validate(user);
@@ -39,7 +41,7 @@ public class UserController {
 
     @PutMapping()
     public User update(@RequestBody User user) {
-        if(users.get(user.getId()) == null){
+        if (users.get(user.getId()) == null) {
             logger.warn("Attempting to update not existing user!");
             throw new NoSuchElementException();
         }
