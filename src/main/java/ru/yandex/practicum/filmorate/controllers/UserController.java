@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public User addUser(@RequestBody User user){
+    public User addUser(@RequestBody User user) {
         validate(user);
         if (user.getName() == null) {
             user.setName(user.getLogin());
