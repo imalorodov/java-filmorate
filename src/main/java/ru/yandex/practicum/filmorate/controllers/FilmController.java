@@ -1,10 +1,8 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.ValidationException;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,13 +14,12 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private static final Logger logger = LoggerFactory.getLogger(FilmController.class);
     private final HashMap<Integer, Film> movies = new HashMap<>();
     private int id = 1;
 
     @GetMapping()
     public List<Film> getFilms() {
-
+        log.info("get request");
         return new ArrayList<>(movies.values());
     }
 
@@ -31,18 +28,22 @@ public class FilmController {
         validate(film);
         film.setId(id++);
         movies.put(film.getId(), film);
-        logger.info("Film '" + film.getName() + "' added");
-        return movies.get(id - 1);
+        log.info("Film '" + film.getName() + "' added");
+        return movies.get(film.getId());
     }
 
     @PutMapping()
     public Film updateFilm(@RequestBody Film film) {
         if (movies.get(film.getId()) == null) {
-            logger.warn("Attempting to update not existing film!");
-            throw new NoSuchElementException();
+            log.warn("Attempting to update not existing film!");
+            throw new NoSuchElementException(); /* вытягивается NoSuchElementException потому что он возвращает 500 код,
+            что есть в требованиях тестов, а так же подходит по логике,
+            клиент пытается обновить объект которого не существует,
+            а аповерка валидации происходит ниже, таким образом есть разница между этими двумя ошибками. */
         } else {
+            validate(film);
             movies.put(film.getId(), film);
-            logger.info("Film '" + film.getName() + "' with id: " + film.getId() + " updated.");
+            log.info("Film '" + film.getName() + "' with id: " + film.getId() + " updated.");
         }
         return movies.get(film.getId());
     }
@@ -50,7 +51,7 @@ public class FilmController {
     private void validate(Film film) {
         if (film.getName() == null || film.getName().isEmpty() || film.getDescription().length() > 200 || film.getDuration() < 1 ||
                 film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            logger.warn("Validation exception in attempting create a film");
+            log.warn("Validation exception in attempting create a film");
             throw new ValidationException();
         }
     }
