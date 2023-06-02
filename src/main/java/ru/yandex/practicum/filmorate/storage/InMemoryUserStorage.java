@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @Component
-public class InMemoryUserStorage implements UserStorage{
+public class InMemoryUserStorage implements UserStorage {
     private final HashMap<Integer, User> storage = new HashMap<>();
 
     @Override
