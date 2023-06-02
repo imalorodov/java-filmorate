@@ -34,9 +34,9 @@ class UserValidationTest {
         controller.addUser(user);
         controller.addUser(userWithoutName);
 
-        Assertions.assertEquals("[User(id=1, name=name, email=email@mail.ru," +
-                        " login=login, birthday=1993-01-24, friends=null), User(id=2," +
-                        " name=log, email=email2@mail.ru, login=log, birthday=1992-12-05, friends=null)]",
+        Assertions.assertEquals("[User(id=1, name=name, email=email@mail.ru, login=login," +
+                        " birthday=1993-01-24, friends=[]), User(id=2, name=log, email=email2@mail.ru," +
+                        " login=log, birthday=1992-12-05, friends=[])]",
                 controller.getUsers().toString());
     }
 

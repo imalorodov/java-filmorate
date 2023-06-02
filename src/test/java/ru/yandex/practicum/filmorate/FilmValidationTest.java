@@ -30,7 +30,7 @@ public class FilmValidationTest {
         controller.addFilm(film);
 
         Assertions.assertEquals("[Film(id=1, name=name, description=Description," +
-                " releaseDate=1993-01-24, duration=100, likes=null)]", controller.getFilms().toString());
+                " releaseDate=1993-01-24, duration=100, likes=[])]", controller.getFilms().toString());
     }
 
     @Test
