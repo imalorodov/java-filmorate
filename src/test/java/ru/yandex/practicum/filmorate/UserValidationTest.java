@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.controllers.UserController;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import java.time.LocalDate;
 
 class UserValidationTest {
@@ -13,7 +15,7 @@ class UserValidationTest {
 
     @BeforeEach
     void init() {
-        controller = new UserController();
+        controller = new UserController(new InMemoryUserStorage(), new UserService());
     }
 
     @Test
@@ -32,8 +34,9 @@ class UserValidationTest {
         controller.addUser(user);
         controller.addUser(userWithoutName);
 
-        Assertions.assertEquals("[User(id=1, name=name, email=email@mail.ru, login=login," +
-                " birthday=1993-01-24), User(id=2, name=log, email=email2@mail.ru, login=log, birthday=1992-12-05)]",
+        Assertions.assertEquals("[User(id=1, name=name, email=email@mail.ru," +
+                        " login=login, birthday=1993-01-24, friends=null), User(id=2," +
+                        " name=log, email=email2@mail.ru, login=log, birthday=1992-12-05, friends=null)]",
                 controller.getUsers().toString());
     }
 
