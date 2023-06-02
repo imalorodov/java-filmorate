@@ -20,7 +20,7 @@ public class UserService {
 
     public List<Integer> commonFriends(User user, User friend) {
         List<Integer> toReturn = new ArrayList<>();
-        for(Integer i : user.getFriends()) {
+        for(Integer i : user.getFriends()){
             if (friend.getFriends().contains(i)) {
                 toReturn.add(i);
             }

@@ -62,7 +62,7 @@ public class UserController {
             throw new NoSuchUserException("the user doesn't exist");
         }
         List<User> friends = new ArrayList<>();
-        for (Integer i : user.getFriends()) {
+        for(Integer i : user.getFriends()){
             friends.add(storage.getUser(i));
         }
 
