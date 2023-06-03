@@ -15,7 +15,7 @@ class UserValidationTest {
 
     @BeforeEach
     void init() {
-        controller = new UserController( new UserService(new InMemoryUserStorage()));
+        controller = new UserController(new UserService(new InMemoryUserStorage()));
     }
 
     @Test
