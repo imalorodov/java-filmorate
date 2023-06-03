@@ -28,9 +28,11 @@ public class UserService {
     }
 
     public List<User> commonFriends(int userId, int friendId) {
-        List<Integer> f = storage.getUser(userId).getFriends().stream().
-                filter(storage.getUser(friendId).getFriends()::contains).
-                collect(Collectors.toList());
+        List<Integer> f = storage.getUser(userId)
+                .getFriends()
+                .stream()
+                .filter(storage.getUser(friendId).getFriends()::contains)
+                .collect(Collectors.toList());
 
         return f.stream().map(this::getUser).collect(Collectors.toList());
     }
