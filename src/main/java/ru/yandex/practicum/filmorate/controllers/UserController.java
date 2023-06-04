@@ -1,54 +1,86 @@
 package ru.yandex.practicum.filmorate.controllers;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Slf4j
 @RestController
+@Component
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-    private final HashMap<Integer, User> users = new HashMap<>();
-    private int id = 1;
+    private final UserService service;
 
     @GetMapping()
     public List<User> getUsers() {
 
-        log.info("Get request");
-        return new ArrayList<>(users.values());
+        log.info("Get all users request");
+        return service.getUsers();
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable int id) {
+
+        log.info("get user " + id + " request");
+        return service.getUser(id);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> friendList(@PathVariable int id) {
+
+        log.info("Friends list request");
+        return service.friendList(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> commonFriends(@PathVariable int id, @PathVariable int otherId) {
+
+        log.info("Common friends list request");
+        return service.commonFriends(id, otherId);
     }
 
     @PostMapping()
     public User addUser(@RequestBody User user) {
         validate(user);
         checkName(user);
-        user.setId(id++);
-        users.put(user.getId(), user);
         log.info("User '" + user.getName() + "' added");
 
-        return users.get(user.getId());
+        return service.addUser(user);
     }
 
     @PutMapping()
     public User update(@RequestBody User user) {
-        if (users.get(user.getId()) == null) {
-            log.warn("Attempting to update not existing user!");
-            throw new NoSuchElementException(); /* вытягивается NoSuchElementException потому что он возвращает 500 код,
-            что есть в требованиях тестов, а так же подходит по логике,
-            клиент пытается обновить объект которого не существует,
-            а аповерка валидации происходит ниже, таким образом есть разница между этими двумя ошибками. */
-        }
         validate(user);
         checkName(user);
-        users.put(user.getId(), user);
+        user = service.update(user);
         log.info("User '" + user.getName() + "' with id: " + user.getId() + " updated.");
-        return users.get(user.getId());
+
+        return user;
+    }
+
+    @PutMapping("/{id}/friends/{friendId}")
+    public void addFriend(@PathVariable int id, @PathVariable int friendId)  {
+        service.addFriend(service.getUser(id), service.getUser(friendId));
+        log.info("Users " + id + " and " + friendId + " became friends");
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public void delFriend(@PathVariable int id, @PathVariable int friendId) {
+        service.delFriend(service.getUser(id), service.getUser(friendId));
+        log.info("User " + id + " deleted " + friendId + " from friends list");
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable int id) {
+        service.deleteUser(id);
+        log.info("user" + id + "deleted");
     }
 
     private void validate(User user) {

@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.controllers.FilmController;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+
 import java.time.LocalDate;
 
 public class FilmValidationTest {
@@ -14,7 +19,8 @@ public class FilmValidationTest {
 
     @BeforeEach
     void init() {
-        controller = new FilmController();
+        controller = new FilmController(new FilmService(new InMemoryFilmStorage()),
+                new UserService(new InMemoryUserStorage()));
     }
 
     @Test
@@ -27,7 +33,7 @@ public class FilmValidationTest {
         controller.addFilm(film);
 
         Assertions.assertEquals("[Film(id=1, name=name, description=Description," +
-                " releaseDate=1993-01-24, duration=100)]", controller.getFilms().toString());
+                " releaseDate=1993-01-24, duration=100, likes=[])]", controller.getFilms().toString());
     }
 
     @Test
